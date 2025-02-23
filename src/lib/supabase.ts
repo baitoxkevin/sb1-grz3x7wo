@@ -2,9 +2,9 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/database.types';
 
 declare global {
-  interface ImportMetaEnv {
-    VITE_SUPABASE_URL: string;
-    VITE_SUPABASE_ANON_KEY: string;
+  interface ImportMetaEnv extends Record<string, string> {
+    readonly VITE_SUPABASE_URL: string;
+    readonly VITE_SUPABASE_ANON_KEY: string;
   }
 }
 
