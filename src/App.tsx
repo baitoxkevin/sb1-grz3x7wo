@@ -1,6 +1,9 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { supabase } from '@/lib/supabase';
 import type { Session } from '@supabase/supabase-js';
 import LoginPage from './pages/LoginPage';
@@ -63,7 +66,55 @@ function App() {
   }
 
   if (!session) {
-    return <LoginPage />;
+    return (
+      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+        <div className="min-h-screen flex items-center justify-center">
+          <Card className="w-[400px]">
+            <CardHeader>
+              <CardTitle>Welcome to BaitoAI</CardTitle>
+              <CardDescription>Internal access only - No Google OAuth required</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const email = formData.get('email') as string;
+                const password = formData.get('password') as string;
+                
+                try {
+                  const { error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                  });
+
+                  if (error) throw error;
+                } catch (error) {
+                  console.error('Login error:', error);
+                }
+              }} className="space-y-4">
+                <Input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  defaultValue="kevin@baito.events"
+                  required
+                />
+                <Input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  defaultValue="BaitoTest111~~"
+                  required
+                />
+                <Button type="submit" className="w-full">
+                  Login
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   return (
