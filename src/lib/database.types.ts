@@ -109,50 +109,6 @@ export interface Database {
           } | null
         }
       }
-      documents: {
-        Row: {
-          id: string
-          name: string
-          type: string
-          size: number
-          folder: string
-          storage_path: string
-          owner_id: string
-          document_type?: 'project_pl' | 'project_claim' | 'project_proposal' | 'briefing_deck'
-          project_id?: string
-          shared_with: string[]
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          name: string
-          type: string
-          size: number
-          folder: string
-          storage_path: string
-          owner_id: string
-          document_type?: 'project_pl' | 'project_claim' | 'project_proposal' | 'briefing_deck'
-          project_id?: string
-          shared_with?: string[]
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          name?: string
-          type?: string
-          size?: number
-          folder?: string
-          storage_path?: string
-          owner_id?: string
-          document_type?: 'project_pl' | 'project_claim' | 'project_proposal' | 'briefing_deck'
-          project_id?: string
-          shared_with?: string[]
-          created_at?: string
-          updated_at?: string
-        }
-      }
     }
     Views: {
       [_ in never]: never
