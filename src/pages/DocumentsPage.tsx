@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import {
@@ -28,7 +27,7 @@ import {
   FolderPlusIcon,
   Filter,
   MoreVertical,
-  ExternalLink,
+
   Download,
   Trash2,
   Share2,

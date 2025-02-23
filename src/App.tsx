@@ -41,7 +41,7 @@ function App() {
     return () => subscription.unsubscribe();
   }, []);
 
-  const checkSuperAdmin = async (session: Session) => {
+  const checkSuperAdmin = async (_session: Session) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (user) {
       const { data: userData } = await supabase
