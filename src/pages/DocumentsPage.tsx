@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import {
@@ -18,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import type { Database } from '@/lib/database.types';
 import {
   Search,
   FolderIcon,
@@ -39,7 +41,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from '@/hooks/use-toast';
 
-type Document = {
+type Document = Database['public']['Tables']['documents']['Row'] & {
   id: string;
   name: string;
   type: string;
