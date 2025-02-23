@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { uploadDocument, downloadDocument, deleteDocument, shareDocument } from '@/lib/document-storage';
 import { supabase } from '@/lib/supabase';
 import {
   Table,
@@ -113,12 +114,28 @@ export default function DocumentsPage() {
       });
   }, []);
 
-  const handleUpload = async () => {
-    // TODO: Implement n8n-based RAG upload
-    toast({
-      title: "Coming Soon",
-      description: "Document upload with RAG integration will be implemented soon"
-    });
+  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const document = await uploadDocument(file, {
+        folder: selectedFolder === 'all' ? 'General' : selectedFolder
+      });
+      
+      setDocuments(prev => [...prev, document]);
+      toast({
+        title: "Success",
+        description: "File uploaded successfully"
+      });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to upload file"
+      });
+    }
   };
 
   const filteredDocuments = documents.filter(doc => {
@@ -134,14 +151,22 @@ export default function DocumentsPage() {
       {/* Sidebar */}
       <div className="w-64 border-r p-4 space-y-4">
         <div className="space-y-2">
-          <Button 
-            variant="outline" 
-            className="w-full justify-start"
-            onClick={handleUpload}
-          >
-            <UploadIcon className="mr-2 h-4 w-4" />
-            Upload File
-          </Button>
+          <label htmlFor="file-upload">
+            <input
+              id="file-upload"
+              type="file"
+              className="hidden"
+              onChange={handleUpload}
+            />
+            <Button 
+              variant="outline" 
+              className="w-full justify-start"
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
+              <UploadIcon className="mr-2 h-4 w-4" />
+              Upload File
+            </Button>
+          </label>
           <Button variant="outline" className="w-full justify-start">
             <FolderPlusIcon className="mr-2 h-4 w-4" />
             New Folder
