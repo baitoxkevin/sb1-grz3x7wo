@@ -87,21 +87,27 @@ function App() {
     <Routes>
       <Route 
         path="/login" 
-        element={user ? <Navigate to="/" replace /> : <LoginPage onViewChange={setActiveView} />} 
+        element={user ? <Navigate to="/dashboard" replace /> : <LoginPage />} 
       />
       <Route
         path="/"
+        element={user ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />}
+      />
+      <Route
+        path="/dashboard/*"
         element={
           user ? (
             <div className="min-h-screen w-full bg-background text-foreground p-[2px] flex items-center justify-center">
               <SidebarDemo activeView={activeView} onViewChange={setActiveView}>
-                {activeView === 'dashboard' && <Dashboard />}
-                {activeView === 'calendar' && <CalendarPage />}
-                {activeView === 'companies' && <CompaniesPage />}
-                {activeView === 'projects' && <ProjectsPage />}
-                {activeView === 'invites' && <InvitesPage />}
-                {activeView === 'todo' && <TodoPage />}
-                {activeView === 'candidates' && <CandidatesPage />}
+                <Routes>
+                  <Route index element={<Dashboard />} />
+                  <Route path="calendar" element={<CalendarPage />} />
+                  <Route path="companies" element={<CompaniesPage />} />
+                  <Route path="projects" element={<ProjectsPage />} />
+                  <Route path="invites" element={<InvitesPage />} />
+                  <Route path="todo" element={<TodoPage />} />
+                  <Route path="candidates" element={<CandidatesPage />} />
+                </Routes>
               </SidebarDemo>
             </div>
           ) : (
