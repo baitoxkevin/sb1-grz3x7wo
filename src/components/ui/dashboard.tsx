@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import * as React from 'react';
 import { Card, CardContent } from './card';
 import { Calendar } from './calendar';
 
-export const Dashboard = () => {
+export const Dashboard: React.FC = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   const meetings = [
