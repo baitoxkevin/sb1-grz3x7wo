@@ -3,7 +3,6 @@ import { Link, useLocation } from "react-router-dom";
 import { Sidebar, SidebarBody } from "./ui/sidebar";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
 import { 
   LayoutDashboard, 
   UserCog, 
@@ -64,7 +63,7 @@ export function SidebarDemo({ children }: SidebarDemoProps) {
   const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { toast } = useToast();
+  // Theme and navigation state
   const location = useLocation();
 
   useEffect(() => {

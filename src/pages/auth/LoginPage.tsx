@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
@@ -15,7 +14,7 @@ export function LoginPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
+  // Navigation will be handled by window.location.href
   // Using sonner toast directly
 
   useEffect(() => {
@@ -117,14 +116,10 @@ export function LoginPage() {
                 data-devinid="2"
               />
             </div>
-            <button 
+            <Button 
               type="submit" 
-              className="w-full bg-black text-white py-2 rounded-md hover:bg-black/90 transition-colors"
+              className="w-full"
               disabled={isLoading || !email || !password}
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit(e as any);
-              }}
             >
               {isLoading ? (
                 <>
@@ -134,7 +129,7 @@ export function LoginPage() {
               ) : (
                 'Sign in'
               )}
-            </button>
+            </Button>
           </form>
         </CardContent>
       </Card>
