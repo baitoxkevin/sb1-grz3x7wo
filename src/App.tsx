@@ -87,7 +87,7 @@ function App() {
     <Routes>
       <Route 
         path="/login" 
-        element={user ? <Navigate to="/" replace /> : <LoginPage />} 
+        element={user ? <Navigate to="/" replace /> : <LoginPage onViewChange={setActiveView} />} 
       />
       <Route
         path="/"
