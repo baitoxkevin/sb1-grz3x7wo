@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import type { Database } from '@/types/database.types';
 import { SidebarDemo } from '@/components/sidebar-demo';
-import { Dashboard } from '@/components/ui/dashboard';
+import { Dashboard } from '@/components/ui/dashboard/index';
 import CalendarPage from '@/pages/CalendarPage';
 import CompaniesPage from '@/pages/CompaniesPage';
 import ProjectsPage from '@/pages/ProjectsPage';
@@ -18,7 +18,7 @@ import CandidatesPage from '@/pages/CandidatesPage';
 function App() {
   const [user, setUser] = useState<Database['public']['Tables']['users']['Row'] | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState('dashboard');
+  const [activeView, setActiveView] = useState<string>('dashboard');
 
   useEffect(() => {
     // Check current auth state
