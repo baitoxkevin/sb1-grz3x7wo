@@ -21,7 +21,7 @@ export function LoginPage() {
     document.title = 'Login - BaitoAI';
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log('Form submitted');
     
