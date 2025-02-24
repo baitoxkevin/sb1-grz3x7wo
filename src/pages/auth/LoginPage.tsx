@@ -8,8 +8,6 @@ import { Loader2 } from "lucide-react";
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import { cn } from '@/lib/utils';
-import type { Session } from '@supabase/supabase-js';
-
 // Add global styles
 import '@/index.css';
 

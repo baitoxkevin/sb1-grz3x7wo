@@ -1,15 +1,8 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { LoginPage } from './pages/auth/LoginPage';
-import CalendarPage from './pages/CalendarPage';
-import CompaniesPage from './pages/CompaniesPage';
-import ProjectsPage from './pages/ProjectsPage';
-import InvitesPage from './pages/InvitesPage';
-import TodoPage from './pages/TodoPage';
-import CandidatesPage from './pages/CandidatesPage';
-import SettingsPage from './pages/SettingsPage';
-import { SidebarDemo } from './components/sidebar-demo';
 import { supabase } from './lib/supabase';
 import { toast } from 'sonner';
 import type { User } from '@supabase/supabase-js';
@@ -17,7 +10,7 @@ import type { User } from '@supabase/supabase-js';
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState('dashboard');
+  // Removed activeView state as we're focusing on login
 
   useEffect(() => {
     // Check current auth state
@@ -92,16 +85,11 @@ function App() {
         path="/"
         element={
           user ? (
-            <div className="min-h-screen w-full bg-background text-foreground p-[2px] flex items-center justify-center">
-              <SidebarDemo activeView={activeView} onViewChange={setActiveView}>
-                {activeView === 'calendar' && <CalendarPage />}
-                {activeView === 'companies' && <CompaniesPage />}
-                {activeView === 'projects' && <ProjectsPage />}
-                {activeView === 'invites' && <InvitesPage />}
-                {activeView === 'todo' && <TodoPage />}
-                {activeView === 'candidates' && <CandidatesPage />}
-                {activeView === 'settings' && <SettingsPage />}
-              </SidebarDemo>
+            <div className="min-h-screen bg-background p-8">
+              <h1 className="text-2xl font-bold mb-4">Welcome {user.email}</h1>
+              <pre className="bg-muted p-4 rounded-lg overflow-auto">
+                {JSON.stringify(user, null, 2)}
+              </pre>
             </div>
           ) : (
             <Navigate to="/login" replace />
