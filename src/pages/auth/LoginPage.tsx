@@ -62,14 +62,9 @@ export function LoginPage() {
         return;
       }
 
-      // Direct routing based on super admin status
-      if (userData?.raw_user_meta_data?.is_super_admin) {
-        console.log('Redirecting to admin...');
-        navigate('/admin', { replace: true });
-      } else {
-        console.log('Redirecting to home...');
-        navigate('/', { replace: true });
-      }
+      // Route to main application container
+      console.log('Redirecting to main app...');
+      navigate('/', { replace: true });
       
     } catch (error) {
       console.error('Login error:', error);
