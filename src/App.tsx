@@ -5,12 +5,19 @@ import { Loader2 } from 'lucide-react';
 import { LoginPage } from './pages/auth/LoginPage';
 import { supabase } from './lib/supabase';
 import { toast } from 'sonner';
-import type { User } from '@supabase/supabase-js';
+import type { Database } from './types/database.types';
+import { SidebarDemo } from './components/sidebar-demo';
+import CalendarPage from './pages/CalendarPage';
+import CompaniesPage from './pages/CompaniesPage';
+import ProjectsPage from './pages/ProjectsPage';
+import InvitesPage from './pages/InvitesPage';
+import TodoPage from './pages/TodoPage';
+import CandidatesPage from './pages/CandidatesPage';
 
 function App() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Database['public']['Tables']['users']['Row'] | null>(null);
   const [loading, setLoading] = useState(true);
-  // Removed activeView state as we're focusing on login
+  const [activeView, setActiveView] = useState('dashboard');
 
   useEffect(() => {
     // Check current auth state
@@ -25,7 +32,7 @@ function App() {
             .single();
           
           if (data) {
-            setUser(data as User);
+            setUser(data as Database['public']['Tables']['users']['Row']);
           }
         }
       } catch (error) {
@@ -51,7 +58,7 @@ function App() {
             .eq('id', session.user.id)
             .single();
           
-          setUser(data as User);
+          setUser(data as Database['public']['Tables']['users']['Row']);
         } else {
           setUser(null);
         }
@@ -85,11 +92,15 @@ function App() {
         path="/"
         element={
           user ? (
-            <div className="min-h-screen bg-background p-8">
-              <h1 className="text-2xl font-bold mb-4">Welcome {user.email}</h1>
-              <pre className="bg-muted p-4 rounded-lg overflow-auto">
-                {JSON.stringify(user, null, 2)}
-              </pre>
+            <div className="min-h-screen w-full bg-background text-foreground p-[2px] flex items-center justify-center">
+              <SidebarDemo activeView={activeView} onViewChange={setActiveView}>
+                {activeView === 'calendar' && <CalendarPage />}
+                {activeView === 'companies' && <CompaniesPage />}
+                {activeView === 'projects' && <ProjectsPage />}
+                {activeView === 'invites' && <InvitesPage />}
+                {activeView === 'todo' && <TodoPage />}
+                {activeView === 'candidates' && <CandidatesPage />}
+              </SidebarDemo>
             </div>
           ) : (
             <Navigate to="/login" replace />

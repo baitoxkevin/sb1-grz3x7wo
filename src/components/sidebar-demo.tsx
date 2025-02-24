@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
+import { Sidebar, SidebarBody, SidebarLink } from "./ui/sidebar";
 import { 
   LayoutDashboard, 
   UserCog, 
@@ -23,11 +23,10 @@ import {
   FolderKanban
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "./ui/calendar";
 import { motion } from "framer-motion";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { cn } from "../lib/utils";
+import { useToast } from "../hooks/use-toast";
 
 const LOGO_URL = "https://i.postimg.cc/28D4j6hk/Submark-Alternative-Colour.png";
 
@@ -324,6 +323,17 @@ const CalendarContent = () => {
   );
 };
 
+interface SidebarLink {
+  label: string;
+  href: string;
+  icon: React.ReactNode;
+  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void | Promise<void>;
+  className?: string;
+  "aria-label"?: string;
+  "aria-current"?: "page" | "step" | "location" | "date" | "time" | "true" | "false";
+  "aria-disabled"?: boolean;
+}
+
 interface SidebarDemoProps {
   children: React.ReactNode;
   activeView: string;
@@ -363,7 +373,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
     return null;
   }
 
-  const links = [
+  const links: SidebarLink[] = [
     {
       label: "Dashboard",
       href: "/admin/dashboard",
@@ -374,7 +384,8 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
         activeView === "dashboard" && "bg-muted"
       ),
       "aria-label": "Go to Dashboard",
-      "aria-current": activeView === "dashboard" ? "page" : undefined
+      "aria-current": activeView === "dashboard" ? "page" : "false",
+      "aria-disabled": false
     },
     {
       label: "Projects",
@@ -382,7 +393,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
       icon: (
         <FolderKanban className="sidebar-link-icon" />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("projects");
       },
@@ -390,7 +401,8 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
         "sidebar-link",
         activeView === "projects" && "bg-muted"
       ),
-      "aria-current": activeView === "projects" ? "page" : undefined,
+      "aria-current": activeView === "projects" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "Calendar",
@@ -400,7 +412,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
           className="sidebar-link-icon" 
         />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("calendar");
       },
@@ -408,7 +420,8 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
         "sidebar-link",
         activeView === "calendar" && "bg-muted"
       ),
-      "aria-current": activeView === "calendar" ? "page" : undefined,
+      "aria-current": activeView === "calendar" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "Candidates",
@@ -416,7 +429,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
       icon: (
         <UserPlus className="sidebar-link-icon" />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("candidates");
       },
@@ -424,7 +437,8 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
         "sidebar-link",
         activeView === "candidates" && "bg-muted"
       ),
-      "aria-current": activeView === "candidates" ? "page" : undefined,
+      "aria-current": activeView === "candidates" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "To-Do-List",
@@ -432,7 +446,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
       icon: (
         <ListTodo className="sidebar-link-icon" />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("todo");
       },
@@ -440,7 +454,8 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
         "sidebar-link",
         activeView === "todo" && "bg-muted"
       ),
-      "aria-current": activeView === "todo" ? "page" : undefined,
+      "aria-current": activeView === "todo" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "Companies",
@@ -448,23 +463,25 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
       icon: (
         <Building2 className="sidebar-link-icon" />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("companies");
       },
       className: "sidebar-link",
-      "aria-current": activeView === "companies" ? "page" : undefined,
+      "aria-current": activeView === "companies" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "Settings",
       href: "/admin/settings",
       icon: <Settings className="sidebar-link-icon" />,
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         onViewChange("settings");
       },
       className: "sidebar-link",
-      "aria-current": activeView === "settings" ? "page" : undefined,
+      "aria-current": activeView === "settings" ? "page" : "false",
+      "aria-disabled": false,
     },
     {
       label: "Theme",
@@ -474,7 +491,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
       ) : (
         <Sun className="sidebar-link-icon" />
       ),
-      onClick: (e) => {
+      onClick: (e: React.MouseEvent<HTMLAnchorElement>) => {
         e.preventDefault();
         const newTheme = theme === "dark" ? "light" : "dark";
         setTheme(newTheme);
@@ -513,13 +530,7 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
               link={{
                 label: "Kevin Reuben",
                 href: "#",
-                icon: (
-                  <img
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="h-7 w-7 flex-shrink-0 rounded-full"
-                    alt="Kevin Reuben's avatar"
-                  />
-                ),
+                icon: <UserCog className="sidebar-link-icon" />,
               }}
             />
           </div>
