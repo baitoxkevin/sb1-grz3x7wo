@@ -15,7 +15,7 @@ interface LoginPageProps {
   onViewChange?: (view: string) => void;
 }
 
-export function LoginPage({ onViewChange }: LoginPageProps) {
+export default function LoginPage({ onViewChange }: LoginPageProps) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);

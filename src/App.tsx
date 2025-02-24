@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { LoginPage } from '@/pages/auth/LoginPage';
+import LoginPage from '@/pages/auth/LoginPage';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import type { Database } from '@/types/database.types';
