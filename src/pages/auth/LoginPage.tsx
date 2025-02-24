@@ -11,7 +11,11 @@ import { cn } from '../../lib/utils';
 // Add global styles
 import '../../index.css';
 
-export function LoginPage() {
+interface LoginPageProps {
+  onViewChange?: (view: string) => void;
+}
+
+export function LoginPage({ onViewChange }: LoginPageProps) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -62,9 +66,10 @@ export function LoginPage() {
         return;
       }
 
-      // Route to main application container
-      console.log('Redirecting to main app...');
+      // Route to main application container with dashboard view
+      console.log('Redirecting to dashboard...');
       navigate('/', { replace: true });
+      onViewChange?.('dashboard');
       
     } catch (error) {
       console.error('Login error:', error);
