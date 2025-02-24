@@ -87,7 +87,7 @@ function App() {
     <Routes>
       <Route 
         path="/login" 
-        element={user ? <Navigate to="/" replace /> : <LoginPage />} 
+        element={user ? <Navigate to="/" replace /> : <LoginPage onViewChange={setActiveView} />} 
       />
       <Route
         path="/"
@@ -95,6 +95,7 @@ function App() {
           user ? (
             <div className="min-h-screen w-full bg-background text-foreground p-[2px] flex items-center justify-center">
               <SidebarDemo activeView={activeView} onViewChange={setActiveView}>
+                {activeView === 'dashboard' && <Dashboard />}
                 {activeView === 'calendar' && <CalendarPage />}
                 {activeView === 'companies' && <CompaniesPage />}
                 {activeView === 'projects' && <ProjectsPage />}
@@ -108,6 +109,7 @@ function App() {
           )
         }
       />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
