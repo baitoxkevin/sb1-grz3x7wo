@@ -14,14 +14,13 @@ export function LoginPage() {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  // Navigation will be handled by window.location.href
-  // Using sonner toast directly
+  // Using sonner toast for notifications
 
   useEffect(() => {
     document.title = 'Login - BaitoAI';
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form submitted');
     
@@ -64,7 +63,7 @@ export function LoginPage() {
       await supabase.auth.setSession(data.session);
       
       console.log('Login successful, redirecting to dashboard...');
-      window.location.href = '/dashboard';
+      window.location.replace('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       toast.error('An unexpected error occurred');
