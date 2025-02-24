@@ -4,7 +4,7 @@ import {
   TableBody,
   TableCell,
   TableHeader,
-  TableHead,
+  TableHead as TableHeaderCell,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
