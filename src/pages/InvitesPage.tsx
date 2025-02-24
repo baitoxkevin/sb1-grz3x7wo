@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
+  TableHead,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -28,7 +28,7 @@ export default function InvitesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
-  const loadInvites = async () => {
+  const loadInvites = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('invites')
@@ -51,11 +51,11 @@ export default function InvitesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadInvites();
-  }, []);
+  }, [loadInvites]);
 
   const filteredInvites = invites.filter(invite =>
     invite.email.toLowerCase().includes(searchQuery.toLowerCase())
@@ -105,7 +105,7 @@ export default function InvitesPage() {
               <TableRow key={invite.id}>
                 <TableCell className="font-medium">{invite.email}</TableCell>
                 <TableCell className="capitalize">{invite.role}</TableCell>
-                <TableCell>{invite.company?.name || '-'}</TableCell>
+                <TableCell>-</TableCell>
                 <TableCell>
                   <Badge variant="secondary" className={statusColors[invite.status]}>
                     {invite.status}
@@ -114,7 +114,7 @@ export default function InvitesPage() {
                 <TableCell>
                   {format(new Date(invite.expires_at), 'MMM d, yyyy')}
                 </TableCell>
-                <TableCell>{invite.created_by_user?.full_name}</TableCell>
+                <TableCell>{invite.created_by}</TableCell>
                 <TableCell className="text-right">
                   <Button variant="ghost" size="sm">
                     Resend

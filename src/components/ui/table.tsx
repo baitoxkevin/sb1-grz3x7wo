@@ -118,3 +118,5 @@ export {
   TableCell,
   TableCaption,
 };
+
+export const TableHeaderCell = TableHead;

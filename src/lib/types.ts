@@ -40,8 +40,8 @@ export interface User {
   contact_phone?: string;
   created_at: string;
   updated_at: string;
-  raw_user_meta_data?: Record<string, any>;
-  raw_app_meta_data?: Record<string, any>;
+  raw_user_meta_data?: Record<string, unknown>;
+  raw_app_meta_data?: Record<string, unknown>;
 }
 
 export interface Candidate {

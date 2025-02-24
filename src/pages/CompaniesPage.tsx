@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
+  TableHead,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ export default function CompaniesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
-  const loadCompanies = async () => {
+  const loadCompanies = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('companies')
@@ -39,11 +39,11 @@ export default function CompaniesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadCompanies();
-  }, []);
+  }, [loadCompanies]);
 
   const filteredCompanies = companies.filter(company =>
     company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

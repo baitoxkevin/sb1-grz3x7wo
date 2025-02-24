@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
+  TableHead,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -13,26 +13,15 @@ import { Badge } from '@/components/ui/badge';
 import { 
   PlusIcon, 
   Search, 
-  Loader2,
-  Mail,
-  Phone,
-  Calendar,
-  CheckCircle2,
-  XCircle
+  Loader2
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabase';
-import { format } from 'date-fns';
+// Removed unused import
 import type { Candidate } from '@/lib/types';
 import NewCandidateDialog from '@/components/NewCandidateDialog';
 
-const loyaltyTierColors = {
-  bronze: 'bg-orange-500/10 text-orange-500',
-  silver: 'bg-slate-500/10 text-slate-500',
-  gold: 'bg-yellow-500/10 text-yellow-500',
-  platinum: 'bg-purple-500/10 text-purple-500',
-  diamond: 'bg-blue-500/10 text-blue-500',
-} as const;
+// Removed unused color mapping
 
 export default function CandidatesPage() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -41,7 +30,7 @@ export default function CandidatesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
-  const loadCandidates = async () => {
+  const loadCandidates = useCallback(async () => {
     try {
       console.log('Fetching candidates...');
       const { data, error } = await supabase
@@ -88,11 +77,11 @@ export default function CandidatesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadCandidates();
-  }, []);
+  }, [loadCandidates]);
 
   const filteredCandidates = candidates.filter(candidate =>
     candidate.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||

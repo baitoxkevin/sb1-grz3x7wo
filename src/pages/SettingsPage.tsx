@@ -31,7 +31,7 @@ export default function SettingsPage() {
         title: 'Settings saved',
         description: 'Your settings have been saved successfully.',
       });
-    } catch (error) {
+    } catch {
       toast({
         title: 'Error',
         description: 'Failed to save settings. Please try again.',
