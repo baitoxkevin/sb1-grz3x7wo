@@ -7,6 +7,7 @@ import { supabase } from './lib/supabase';
 import { toast } from 'sonner';
 import type { Database } from './types/database.types';
 import { SidebarDemo } from './components/sidebar-demo';
+import { Dashboard } from './components/ui/dashboard';
 import CalendarPage from './pages/CalendarPage';
 import CompaniesPage from './pages/CompaniesPage';
 import ProjectsPage from './pages/ProjectsPage';
