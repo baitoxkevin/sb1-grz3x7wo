@@ -1,37 +1,32 @@
-import { useState, useEffect, useRef } from 'react';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isWithinInterval, differenceInDays, isSameMonth, isAfter, isBefore, isSameDay, addMonths, subMonths } from 'date-fns';
-import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect, useCallback } from 'react';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, differenceInDays, isSameMonth, isSameDay, isAfter, isBefore, subMonths, addMonths } from 'date-fns';
+import { Card, CardContent } from '../components/ui/card';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "../components/ui/tooltip";
 import {
   Tabs,
-  TabsContent,
   TabsList,
   TabsTrigger,
-} from '@/components/ui/tabs';
+} from '../components/ui/tabs';
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   CalendarIcon,
   ListIcon,
   PlusIcon,
-  Bell,
   Clock, 
   Users, 
   MapPin
 } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
-import { useToast } from '@/hooks/use-toast';
-import { useCalendarCache } from '@/hooks/use-calendar-cache';
-import { CalendarSkeleton } from '@/components/calendar-skeleton';
-import EditProjectDialog from '@/components/EditProjectDialog';
-import NewProjectDialog from '@/components/NewProjectDialog';
+import { useToast } from '../hooks/use-toast';
+import { useCalendarCache } from '../hooks/use-calendar-cache';
+import { CalendarSkeleton } from '../components/calendar-skeleton';
+import EditProjectDialog from '../components/EditProjectDialog';
+import NewProjectDialog from '../components/NewProjectDialog';
 import type { Project } from '@/lib/types';
 
 const eventColors = {
@@ -63,18 +58,7 @@ const projectsOverlap = (a: Project, b: Project) => {
   return aStart <= bEnd && aEnd >= bStart;
 };
 
-const getProjectsForWeek = (projects: Project[], weekStart: number, monthStart: Date) => {
-  return projects.filter(project => {
-    const startDate = new Date(project.start_date);
-    const endDate = project.end_date ? new Date(project.end_date) : startDate;
-    const weekEndDay = weekStart + 6;
-    
-    const projectStartDay = differenceInDays(startDate, monthStart);
-    const projectEndDay = differenceInDays(endDate, monthStart);
-    
-    return (projectStartDay <= weekEndDay && projectEndDay >= weekStart);
-  });
-};
+
 
 const groupOverlappingProjects = (projects: Project[]) => {
   const groups: Project[][] = [];
@@ -138,9 +122,8 @@ const CalendarView = ({
   const [dragStartDate, setDragStartDate] = useState<Date | null>(null);
   const [dragEndDate, setDragEndDate] = useState<Date | null>(null);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const calendarRef = useRef<HTMLDivElement>(null);
 
-  const monthStart = startOfMonth(date);
+  const monthStart= startOfMonth(date);
   const monthEnd = endOfMonth(date);
   const calendarStart = new Date(monthStart);
   calendarStart.setDate(calendarStart.getDate() - (monthStart.getDay() - 1 + 7) % 7);
@@ -171,7 +154,7 @@ const CalendarView = ({
     }
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     if (isDragging && dragStartDate && dragEndDate) {
       const start = dragStartDate < dragEndDate ? dragStartDate : dragEndDate;
       const end = dragStartDate < dragEndDate ? dragEndDate : dragStartDate;
@@ -181,7 +164,7 @@ const CalendarView = ({
     setDragStartDate(null);
     setDragEndDate(null);
     setSelectedDates([]);
-  };
+  }, [isDragging, dragStartDate, dragEndDate, onDateRangeSelect]);
 
   useEffect(() => {
     const handleGlobalMouseUp = () => {
@@ -194,7 +177,7 @@ const CalendarView = ({
     return () => {
       document.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [isDragging, dragStartDate, dragEndDate]);
+  }, [isDragging, dragStartDate, dragEndDate, handleMouseUp]);
 
   const isDateSelected = (day: Date) => {
     return selectedDates.some(selectedDate => 
@@ -507,10 +490,15 @@ export default function CalendarPage() {
   const { getMonthData, invalidateCache, isLoading } = useCalendarCache();
   const { toast } = useToast();
 
-  const loadProjects = async () => {
+  const loadProjects = useCallback(async () => {
     try {
       const data = await getMonthData(date);
-      setProjects(data);
+      const typedProjects = data.map(project => ({
+        ...project,
+        start_date: new Date(project.start_date),
+        end_date: project.end_date ? new Date(project.end_date) : null
+      }));
+      setProjects(typedProjects as unknown as Project[]);
     } catch (error) {
       console.error('Error loading projects:', error);
       toast({
@@ -519,11 +507,11 @@ export default function CalendarPage() {
         variant: 'destructive',
       });
     }
-  };
+  }, [date, getMonthData, toast, setProjects]);
 
   useEffect(() => {
-    loadProjects();
-  }, [date]);
+    void loadProjects();
+  }, [date, loadProjects]);
 
   const handleProjectUpdate = () => {
     invalidateCache(date);

@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
+  TableHeaderCell,
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ export default function CompaniesPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
-  const loadCompanies = async () => {
+  const loadCompanies = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('companies')
@@ -39,11 +39,11 @@ export default function CompaniesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     loadCompanies();
-  }, []);
+  }, [loadCompanies]);
 
   const filteredCompanies = companies.filter(company =>
     company.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -80,11 +80,11 @@ export default function CompaniesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Company Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Phone</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHeaderCell>Company Name</TableHeaderCell>
+              <TableHeaderCell>Email</TableHeaderCell>
+              <TableHeaderCell>Phone</TableHeaderCell>
+              <TableHeaderCell>Address</TableHeaderCell>
+              <TableHeaderCell className="text-right">Actions</TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

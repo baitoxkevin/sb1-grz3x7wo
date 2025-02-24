@@ -28,7 +28,29 @@ export function useCalendarCache() {
     return Date.now() - entry.timestamp < CACHE_DURATION;
   };
 
-  const fetchProjects = async (startDate: Date, endDate: Date) => {
+  type ProjectResponse = {
+    id: string;
+    title: string;
+    client: { full_name: string }[];
+    client_id: string;
+    manager_id: string;
+    status: string;
+    priority: string;
+    start_date: string;
+    end_date: string | null;
+    crew_count: number;
+    filled_positions: number;
+    working_hours_start: string;
+    working_hours_end: string;
+    event_type: string;
+    venue_address: string;
+    venue_details?: string;
+    supervisors_required: number;
+    created_at: string;
+    updated_at: string;
+  };
+
+  const fetchProjects = async (startDate: Date, endDate: Date): Promise<ProjectResponse[]> => {
     const { data, error } = await supabase
       .from('projects')
       .select(`
@@ -48,7 +70,9 @@ export function useCalendarCache() {
         event_type,
         venue_address,
         venue_details,
-        supervisors_required
+        supervisors_required,
+        created_at,
+        updated_at
       `)
       .or(
         `and(start_date.gte.${startDate.toISOString()},start_date.lte.${endDate.toISOString()}),` +
@@ -86,7 +110,21 @@ export function useCalendarCache() {
         const data = await fetchProjects(monthStart, monthEnd);
 
         cache.current[cacheKey] = {
-          data,
+          data: data.map(project => ({
+            ...project,
+            color: '#' + Math.floor(Math.random()*16777215).toString(16),
+            client: project.client?.[0] ? {
+              id: '',
+              email: '',
+              full_name: project.client[0].full_name,
+              role: 'client',
+              is_super_admin: false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            } : undefined,
+            created_at: project.created_at,
+            updated_at: project.updated_at
+          })) as Project[],
           timestamp: Date.now()
         };
       }));
@@ -115,18 +153,32 @@ export function useCalendarCache() {
 
       // Update cache
       cache.current[cacheKey] = {
-        data,
+        data: data.map(project => ({
+          ...project,
+          color: '#' + Math.floor(Math.random()*16777215).toString(16),
+          client: project.client?.[0] ? {
+            id: '',
+            email: '',
+            full_name: project.client[0].full_name,
+            role: 'client',
+            is_super_admin: false,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          } : undefined,
+          created_at: project.created_at,
+          updated_at: project.updated_at
+        })) as Project[],
         timestamp: Date.now()
       };
 
       // Start prefetching adjacent months
-      prefetchMonthData(date);
+      void prefetchMonthData(date);
 
       return data;
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [fetchProjects, prefetchMonthData]);
 
   const invalidateCache = useCallback((date?: Date) => {
     if (date) {

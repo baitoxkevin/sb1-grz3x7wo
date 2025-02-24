@@ -5,7 +5,6 @@ import {
   LayoutDashboard, 
   UserCog, 
   Settings, 
-  LogOut, 
   Calendar as CalendarIcon, 
   Users,
   ListTodo,
@@ -13,12 +12,10 @@ import {
   Bell, 
   ChevronRight, 
   Building2, 
-  Mail, 
   CalendarDays, 
   Zap, 
   Moon, 
   Sun, 
-  Loader2,
   UserPlus,
   FolderKanban
 } from "lucide-react";
@@ -201,129 +198,7 @@ const Dashboard = () => {
   );
 };
 
-const CalendarContent = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-
-  const meetings = [
-    {
-      title: "Design Review",
-      time: "10:00 AM",
-      attendees: 4,
-      priority: "high"
-    },
-    {
-      title: "Team Standup",
-      time: "2:30 PM",
-      attendees: 8,
-      priority: "medium"
-    },
-    {
-      title: "Project Planning",
-      time: "4:00 PM",
-      attendees: 6,
-      priority: "low"
-    }
-  ];
-
-  return (
-    <div className="flex flex-1">
-      <div className="p-4 rounded-none md:rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 flex flex-col gap-4 w-full h-full overflow-hidden">
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-gray-100 dark:bg-neutral-800">
-            <div className="p-2.5 rounded-md bg-blue-500/10 text-blue-500">
-              <CalendarDays className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-medium">Events</p>
-              <p className="text-xl sm:text-2xl font-semibold">12</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-gray-100 dark:bg-neutral-800">
-            <div className="p-2.5 rounded-md bg-green-500/10 text-green-500">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-medium">Attendees</p>
-              <p className="text-xl sm:text-2xl font-semibold">48</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-gray-100 dark:bg-neutral-800">
-            <div className="p-2.5 rounded-md bg-yellow-500/10 text-yellow-500">
-              <Clock className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-medium">Hours</p>
-              <p className="text-xl sm:text-2xl font-semibold">24</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3 p-3 sm:p-4 rounded-lg bg-gray-100 dark:bg-neutral-800">
-            <div className="p-2.5 rounded-md bg-purple-500/10 text-purple-500">
-              <Bell className="h-5 w-5" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-medium">Reminders</p>
-              <p className="text-xl sm:text-2xl font-semibold">8</p>
-            </div>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 flex-1 min-h-0">
-          <div className="rounded-lg bg-gray-100 dark:bg-neutral-800 p-3 sm:p-4 flex flex-col gap-3 sm:gap-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm sm:text-base font-semibold">Calendar</h3>
-              <button className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50">
-                View all
-              </button>
-            </div>
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(newDate) => setDate(newDate)}
-              className="rounded-md border w-full"
-            />
-          </div>
-          <div className="rounded-lg bg-gray-100 dark:bg-neutral-800 p-3 sm:p-4 flex flex-col gap-3 sm:gap-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm sm:text-base font-semibold">Today's Meetings</h3>
-              <button className="text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-50">
-                View all
-              </button>
-            </div>
-            <div className="flex flex-col gap-2 sm:gap-3 overflow-y-auto">
-              {meetings.map((meeting, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center justify-between p-2 sm:p-3 rounded-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "w-2 h-2 rounded-full",
-                      meeting.priority === "high" ? "bg-red-500" :
-                      meeting.priority === "medium" ? "bg-yellow-500" :
-                      "bg-green-500"
-                    )} />
-                    <div>
-                      <p className="text-sm sm:text-base font-medium">{meeting.title}</p>
-                      <div className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-neutral-600 dark:text-neutral-400">
-                        <Clock className="h-3 w-3" />
-                        <span>{meeting.time}</span>
-                        <span>•</span>
-                        <Users className="h-3 w-3" />
-                        <span>{meeting.attendees}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-neutral-600 dark:text-neutral-400" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-interface SidebarLink {
+interface SidebarLinkProps {
   label: string;
   href: string;
   icon: React.ReactNode;
@@ -342,7 +217,7 @@ interface SidebarDemoProps {
 
 export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoProps) {
   const [open, setOpen] = useState(false);
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { toast } = useToast();
 
@@ -352,28 +227,18 @@ export function SidebarDemo({ children, activeView, onViewChange }: SidebarDemoP
 
   const handleDashboardClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    
-    try {
-      onViewChange("dashboard");
-      
-      toast({
-        title: "Dashboard loaded",
-        description: "Welcome to your dashboard",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to load dashboard. Please try again.",
-        variant: "destructive",
-      });
-    }
+    onViewChange("dashboard");
+    toast({
+      title: "Dashboard loaded",
+      description: "Welcome to your dashboard",
+    });
   };
 
   if (!mounted) {
     return null;
   }
 
-  const links: SidebarLink[] = [
+  const links: SidebarLinkProps[] = [
     {
       label: "Dashboard",
       href: "/admin/dashboard",
